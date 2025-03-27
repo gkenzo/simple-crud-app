@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <UsersList users={data} />
+      <UsersList users={data?.users} total={data?.users?.length} />
     </>
   );
 }

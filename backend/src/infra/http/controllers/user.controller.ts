@@ -65,7 +65,8 @@ export class UserController {
 
   @Get()
   async list() {
-    return this.listUserUseCase.execute();
+    const users = await this.listUserUseCase.execute();
+    return { users };
   }
 
   @Put(':id')

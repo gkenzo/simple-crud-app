@@ -18,11 +18,11 @@ const EmptyUserList = () => {
   );
 };
 
-export const UsersList = ({ users }: { users: User[] }) => {
+export const UsersList = ({ users, total }: { users: User[], total: number }) => {
   return (
     <div className="mx-auto max-w-screen-xl flex flex-col">
-      {!!users.length && (
-        <span className="text-right">Total users: {users.length}</span>
+      {!!total && (
+        <span className="text-right">Total users: {total}</span>
       )}
       <div className="grid grid-cols-1 gap-8 px-1 md:grid-cols-2 lg:grid-cols-3">
         {users.length ? (

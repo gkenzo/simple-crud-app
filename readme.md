@@ -22,7 +22,6 @@ Em outro terminal, execute para inicializar o frontend:
 
 Acesse http://localhost:3000
 
-
 ### Executando testes
 
 ``cd backend && npm test``
@@ -30,6 +29,8 @@ Acesse http://localhost:3000
 ### Notas
 
 Caso  houvesse um prazo maior, implementaria:
+
+Paginação na API
 
 Testes E2E com cypress
 
