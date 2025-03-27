@@ -6,6 +6,8 @@ const prisma = new PrismaClient();
 
 async function seed() {
   try {
+    const userExists = await prisma.user.findFirst();
+    if (userExists) return;
     await prisma.user.createMany({
       data: generateMockUsers(20),
     });
