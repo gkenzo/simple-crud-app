@@ -10,6 +10,10 @@ Execute `docker compose up` para inicializar os serviços de banco de dados e re
 
 Execute `npm run setup` no diretório raíz para preparar as aplicações
 
+O comando acima deverá executar o seed do banco de dados, mas caso não aconteça, rodar o comando a partir do diretório raiz:
+
+``cd backend && npx prisma db seed``
+
 ### Inicializando aplicações:
 
 Para inicializar o backend, execute:
