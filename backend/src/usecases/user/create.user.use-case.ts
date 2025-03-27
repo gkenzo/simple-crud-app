@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { User } from '../../domain/entities/index';
 import { UserRepository } from '../../domain/repos/';
@@ -16,10 +16,6 @@ export interface CreateUserOutputDTO {
 
 @Injectable()
 export class CreateUserUseCase {
-  private readonly logger = new Logger(CreateUserUseCase.name, {
-    timestamp: true,
-  });
-
   constructor(private readonly userRepository: UserRepository) {}
 
   toJson(user: User): CreateUserOutputDTO {
@@ -33,7 +29,6 @@ export class CreateUserUseCase {
   async execute(dto: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
     const exists = await this.userRepository.findByEmail(dto.email);
     if (exists) {
-      this.logger.error({ topic: 'user-create', message: 'Duplicated email' });
       throw new Error('An error occurred while creating this user');
     }
     const user = await this.userRepository.create(
@@ -45,8 +40,6 @@ export class CreateUserUseCase {
         updatedAt: new Date(),
       }),
     );
-
-    this.logger.log({ topic: 'user-create', message: user });
 
     return this.toJson(user);
   }

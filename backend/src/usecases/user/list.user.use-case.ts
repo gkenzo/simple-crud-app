@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../domain/repos/';
 import { User } from '../../domain/entities/';
 
@@ -8,9 +8,6 @@ export type ListUserOutputDTO = Promise<
 
 @Injectable()
 export class ListUserUseCase {
-  private readonly logger = new Logger(ListUserUseCase.name, {
-    timestamp: true,
-  });
   constructor(private readonly userRepository: UserRepository) {}
 
   toJson(users: User[]) {
@@ -25,11 +22,9 @@ export class ListUserUseCase {
     const users = await this.userRepository.list();
 
     if (!users) {
-      this.logger.debug({ topic: 'list-user', message: 'There is no users' });
       return [];
     }
 
-    this.logger.log({ topic: 'list-user', message: 'Listing users' });
     return this.toJson(users);
   }
 }
