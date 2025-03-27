@@ -1,0 +1,12 @@
+{
+  "name": "Simple CRUD with Next and Nest",
+  "version": "1.0.0",
+  "description": "Rodando o projeto:",
+  "main": "index.js",
+  "scripts": {
+    "setup": "bash ./setup.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
