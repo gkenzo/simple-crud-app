@@ -1,4 +1,11 @@
-import { Button, Input, Loading, Toaster, Error, FormContainer } from '@/commons';
+import {
+  Button,
+  Input,
+  Loading,
+  Toaster,
+  Error,
+  FormContainer,
+} from '@/commons';
 import { UpdateUserSchema } from '@/core';
 import { User } from '@/domain';
 import { useUserInfo } from '@/hooks';
@@ -11,12 +18,12 @@ export const UserDetailsForm = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const { find, update, remove } = useUserInfo();
   const { data, error, isPending } = useQuery<User, Error>({
-    queryKey: ['get-user', userId],
+    queryKey: ['find-user', userId],
     queryFn: () => find(userId),
     enabled: !!userId,
   });
 
-  const {mutate: updateMutation} = useMutation({
+  const { mutate: updateMutation } = useMutation({
     mutationFn: update,
     onSuccess: () => {
       toast(Toaster, {
@@ -43,7 +50,7 @@ export const UserDetailsForm = ({ userId }: { userId: string }) => {
     },
   });
 
-  const {mutate: removeMutation} = useMutation({
+  const { mutate: removeMutation } = useMutation({
     mutationFn: remove,
     onSuccess: () => {
       router.push('/');

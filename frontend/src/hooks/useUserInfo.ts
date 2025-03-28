@@ -10,7 +10,6 @@ export const useUserInfo = () => {
         email: values.email,
       }),
     };
-
     const res = await fetch(API_URL, config);
 
     if (!res.ok)
@@ -18,20 +17,25 @@ export const useUserInfo = () => {
 
     return res.json();
   };
+
   const list = async (): Promise<{ items: User[] }> => {
     const res = await fetch(`/api/users`);
+
     if (!res.ok)
       throw new Error('Something went wrong while trying to fetch users.');
 
     return res.json();
   };
+
   const find = async (id: string): Promise<User> => {
     const res = await fetch(`/api/user/${id}`);
+
     if (!res.ok)
       throw new Error('Something went wrong while trying to find user.');
 
     return res.json();
   };
+
   const update = async (values: User) => {
     const API_URL = `/api/user/${values.id}`;
     const config: RequestInit = {
@@ -41,7 +45,6 @@ export const useUserInfo = () => {
         email: values.email,
       }),
     };
-
     const res = await fetch(API_URL, config);
 
     if (!res.ok)
@@ -54,7 +57,6 @@ export const useUserInfo = () => {
     const config: RequestInit = {
       method: 'DELETE',
     };
-
     const res = await fetch(API_URL, config);
 
     if (!res.ok)

@@ -1,4 +1,5 @@
-import { Input, Button, Toaster, FormContainer } from '@/commons';
+import { Input, Button, Toaster } from '@/commons';
+import { FormContainer } from '@/commons/FormContainer';
 import { CreateUserSchema } from '@/core';
 import { useUserInfo } from '@/hooks';
 import { useMutation } from '@tanstack/react-query';
