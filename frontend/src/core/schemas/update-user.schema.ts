@@ -4,7 +4,9 @@ export const UpdateUserSchema = object({
   id: string().uuid().required(),
   name: string()
     .required()
-    .min(2, "User's name must contain at least 2 characters")
-    .max(255, "User's name exceed maximum characters"),
-  email: string().email('Must be an email').required('User must have an email'),
+    .min(2, "Name's too short")
+    .max(255, "Name's too long"),
+  email: string()
+    .email('Must be a valid email')
+    .required('Must be a valid email'),
 });
