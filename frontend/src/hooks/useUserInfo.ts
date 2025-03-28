@@ -13,6 +13,12 @@ export const useUserInfo = () => {
 
     return fetch(API_URL, config);
   };
+  const list = async (): Promise<{ items: User[] }> => {
+    return (await fetch(`/api/users`)).json();
+  };
+  const find = async (id: string): Promise<User> => {
+    return (await fetch(`/api/user/${id}`)).json();
+  };
   const update = async (values: User) => {
     const API_URL = `/api/user/${values.id}`;
     const config: RequestInit = {
@@ -33,5 +39,5 @@ export const useUserInfo = () => {
 
     return fetch(API_URL, config);
   };
-  return { create, update, remove };
+  return { create, list, find, update, remove };
 };

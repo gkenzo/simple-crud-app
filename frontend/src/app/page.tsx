@@ -2,16 +2,15 @@
 
 import { Header, Loading, Error } from '@/commons';
 import { UsersList } from '@/components';
+import { User } from '@/domain';
+import { useUserInfo } from '@/hooks';
 import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
-  const { data, error, isPending } = useQuery({
+  const { list } = useUserInfo();
+  const { data, error, isPending } = useQuery<{ items: User[] }, Error>({
     queryKey: ['list-users'],
-    queryFn: async () => {
-      const res = await fetch(`/api/users`);
-
-      return await res.json();
-    },
+    queryFn: list,
   });
 
   if (isPending) return <Loading />;
@@ -21,7 +20,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <UsersList users={data?.users} total={data?.users?.length} />
+      <UsersList users={data?.items} total={data?.items?.length} />
     </>
   );
 }
