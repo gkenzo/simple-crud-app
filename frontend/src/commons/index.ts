@@ -5,3 +5,4 @@ export * from './Input';
 export * from './BackButton';
 export * from './Toaster';
 export * from './Header';
+export * from "./FormContainer";

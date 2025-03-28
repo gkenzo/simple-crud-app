@@ -23,7 +23,7 @@ export const UserCard = ({ user }: { user: User }) => {
           <Button
             type="button"
             text="View details"
-            className="cursor-pointer p-3 bg-slate-800 text-white rounded border w-fit my-3 transition duration-150 ease-in-out hover:bg-white hover:text-black"
+            className="cursor-pointer p-3 bg-indigo-600 text-white rounded border w-fit my-3 transition duration-150 ease-in-out hover:bg-white hover:text-indigo-600 hover:border-indigo-600"
             onClick={() => router.push(`/user/${user.id}`)}
           />
         </div>

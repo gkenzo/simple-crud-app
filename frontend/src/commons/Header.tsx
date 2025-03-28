@@ -3,7 +3,10 @@ import Link from 'next/link';
 const HeaderItem = ({ message, href }: { message: string; href: string }) => {
   return (
     <li>
-      <Link className="text-white transition hover:text-gray-300" href={href}>
+      <Link
+        className="text-white transition hover:text-gray-300 font-bold"
+        href={href}
+      >
         {message}
       </Link>
     </li>
@@ -12,7 +15,7 @@ const HeaderItem = ({ message, href }: { message: string; href: string }) => {
 
 export const Header = () => {
   return (
-    <header className="bg-slate-800 mb-5">
+    <header className="bg-indigo-900 mb-5">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-1 items-center justify-end md:justify-between">
           <nav aria-label="Global" className="hidden md:block">
