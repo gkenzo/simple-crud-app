@@ -1,36 +1,31 @@
-import { Button, Input, Toaster } from '@/commons';
+import { Button, Input, Loading, Toaster, Error, FormContainer } from '@/commons';
 import { UpdateUserSchema } from '@/core';
 import { User } from '@/domain';
 import { useUserInfo } from '@/hooks';
-import { useMutation } from '@tanstack/react-query';
-import { Field, Form, Formik } from 'formik';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Field, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
 import { toast } from 'react-toastify';
 
-type UserDetailsProps = User;
-
-interface FormValues {
-  id: string;
-  email: string;
-  name: string;
-}
-
-export const UserDetailsForm = (props: UserDetailsProps) => {
-  const { id, email, name } = props;
-  const { update, remove } = useUserInfo();
+export const UserDetailsForm = ({ userId }: { userId: string }) => {
   const router = useRouter();
+  const { find, update, remove } = useUserInfo();
+  const { data, error, isPending } = useQuery<User, Error>({
+    queryKey: ['get-user', userId],
+    queryFn: () => find(userId),
+    enabled: !!userId,
+  });
 
-  const mutationUpdate = useMutation({
+  const {mutate: updateMutation} = useMutation({
     mutationFn: update,
     onSuccess: () => {
       toast(Toaster, {
         data: {
-          content: 'User updated',
+          content: 'User updated successfully',
           title: 'Success!',
         },
         progress: 0.8,
-        ariaLabel: 'User updated!',
+        ariaLabel: 'User updated successfully!',
         autoClose: false,
       });
     },
@@ -48,7 +43,7 @@ export const UserDetailsForm = (props: UserDetailsProps) => {
     },
   });
 
-  const mutationRemove = useMutation({
+  const {mutate: removeMutation} = useMutation({
     mutationFn: remove,
     onSuccess: () => {
       router.push('/');
@@ -67,23 +62,15 @@ export const UserDetailsForm = (props: UserDetailsProps) => {
     },
   });
 
-  const onSubmit = useCallback(
-    async (values: FormValues) => {
-      mutationUpdate.mutate(values);
-    },
-    [mutationUpdate],
-  );
+  if (isPending) return <Loading />;
 
-  const onRemove = useCallback(
-    async (id: string) => {
-      mutationRemove.mutate(id);
-    },
-    [mutationRemove],
-  );
+  if (error) return <Error message={error?.message} />;
+
+  const { id, email, name } = data;
 
   return (
     <Formik
-      onSubmit={onSubmit}
+      onSubmit={updateMutation}
       initialValues={{
         id,
         email,
@@ -92,10 +79,7 @@ export const UserDetailsForm = (props: UserDetailsProps) => {
       validationSchema={UpdateUserSchema}
       enableReinitialize
     >
-      <Form className="flex flex-col w-75 rounded-xl border gap-4 max-w-sm overflow-hidden shadow-lg">
-        <div className="px-6 py-4 bg-slate-800 text-white">
-          <h1 className="text-lg font-bold">User details</h1>
-        </div>
+      <FormContainer title="User details">
         <div className="p-5 flex flex-col gap-4">
           <Field
             name="id"
@@ -107,11 +91,11 @@ export const UserDetailsForm = (props: UserDetailsProps) => {
           <Field
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="john.doe@example.com"
             as={Input}
             label="Email"
           />
-          <Field name="name" placeholder="Name" as={Input} label="Name" />
+          <Field name="name" placeholder="John Doe" as={Input} label="Name" />
           <Button
             text="Submit"
             type="submit"
@@ -120,11 +104,11 @@ export const UserDetailsForm = (props: UserDetailsProps) => {
           <Button
             text="Remove"
             type="button"
-            onClick={() => onRemove(id)}
+            onClick={() => removeMutation(id)}
             className="bg-transparent text-red-400 hover:text-red-700 font-semibold py-2 px-4 cursor-pointer mt-2 transition ease-in-out duration-200"
           />
         </div>
-      </Form>
+      </FormContainer>
     </Formik>
   );
 };

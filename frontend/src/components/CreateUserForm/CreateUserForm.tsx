@@ -1,46 +1,57 @@
-import { Input, Button } from '@/commons';
-import { CreateUserFormValues, CreateUserSchema } from '@/core';
-import { Formik, Form, Field } from 'formik';
+import { Input, Button, Toaster, FormContainer } from '@/commons';
+import { CreateUserSchema } from '@/core';
+import { useUserInfo } from '@/hooks';
+import { useMutation } from '@tanstack/react-query';
+import { Formik, Field } from 'formik';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
-interface CreateUserFormProps {
-  onSubmit: (values: CreateUserFormValues) => void;
-}
+export const CreateUserForm = () => {
+  const { create } = useUserInfo();
+  const router = useRouter();
 
-export const CreateUserForm = ({ onSubmit }: CreateUserFormProps) => {
+  const { mutate } = useMutation({
+    mutationFn: create,
+    onSuccess: () => router.push('/'),
+    onError: () =>
+      toast.error(Toaster, {
+        data: {
+          content: 'Error while creating this user',
+          title: 'Something went wrong',
+        },
+        progress: 0.8,
+        ariaLabel: 'Error while creating this user',
+        autoClose: false,
+        theme: 'colored',
+      }),
+  });
+
   return (
     <Formik
-      onSubmit={onSubmit}
+      onSubmit={(values) => mutate(values)}
       initialValues={{
         email: '',
         name: '',
       }}
       validationSchema={CreateUserSchema}
     >
-      <Form className="flex flex-col w-75 rounded-xl border gap-4 max-w-sm overflow-hidden shadow-lg">
-        <div className="px-6 py-4 bg-slate-800 text-white">
-          <h1 className="text-lg font-bold">Create user</h1>
-        </div>
+      <FormContainer title="Create user">
         <div className="p-5 flex flex-col gap-4">
           <Field
             type="email"
             name="email"
-            placeholder="New user email"
+            placeholder="john.doe@example.com"
             as={Input}
             label="Email"
           />
-          <Field
-            name="name"
-            placeholder="New user name"
-            as={Input}
-            label="Name"
-          />
+          <Field name="name" placeholder="John Doe" as={Input} label="Name" />
           <Button
             text="Submit"
             type="submit"
             className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded cursor-pointer mt-2"
           />
         </div>
-      </Form>
+      </FormContainer>
     </Formik>
   );
 };
