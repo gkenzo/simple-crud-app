@@ -1,7 +1,9 @@
 import { User } from '@/domain';
 import { UserCard } from '@/components';
-import { Button } from '@/commons';
+import { Button, Loading, Error } from '@/commons';
 import { useRouter } from 'next/navigation';
+import { useUserInfo } from '@/hooks';
+import { useQuery } from '@tanstack/react-query';
 
 const EmptyUserList = () => {
   const router = useRouter();
@@ -18,14 +20,25 @@ const EmptyUserList = () => {
   );
 };
 
-export const UsersList = ({ users, total }: { users: User[], total: number }) => {
+export const UsersList = () => {
+  const { list } = useUserInfo();
+  const { data, error, isPending } = useQuery<{ items: User[] }, Error>({
+    queryKey: ['list-users'],
+    queryFn: list,
+  });
+
+  if (isPending) return <Loading />;
+
+  if (error) return <Error message={error?.message} />;
+
+  const { items: users } = data;
+  const total = users.length;
+
   return (
     <div className="mx-auto max-w-screen-xl flex flex-col">
-      {!!total && (
-        <span className="text-right">Total users: {total}</span>
-      )}
+      {!!total && <span className="text-right">Total users: {total}</span>}
       <div className="grid grid-cols-1 gap-8 px-1 md:grid-cols-2 lg:grid-cols-3">
-        {users.length ? (
+        {users ? (
           users.map((user) => <UserCard key={user.id} user={user} />)
         ) : (
           <EmptyUserList />

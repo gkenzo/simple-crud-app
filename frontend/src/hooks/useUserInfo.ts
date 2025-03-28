@@ -11,13 +11,26 @@ export const useUserInfo = () => {
       }),
     };
 
-    return fetch(API_URL, config);
+    const res = await fetch(API_URL, config);
+
+    if (!res.ok)
+      throw new Error('Something went wrong while trying to create user.');
+
+    return res.json();
   };
   const list = async (): Promise<{ items: User[] }> => {
-    return (await fetch(`/api/users`)).json();
+    const res = await fetch(`/api/users`);
+    if (!res.ok)
+      throw new Error('Something went wrong while trying to fetch users.');
+
+    return res.json();
   };
   const find = async (id: string): Promise<User> => {
-    return (await fetch(`/api/user/${id}`)).json();
+    const res = await fetch(`/api/user/${id}`);
+    if (!res.ok)
+      throw new Error('Something went wrong while trying to find user.');
+
+    return res.json();
   };
   const update = async (values: User) => {
     const API_URL = `/api/user/${values.id}`;
@@ -29,7 +42,12 @@ export const useUserInfo = () => {
       }),
     };
 
-    return fetch(API_URL, config);
+    const res = await fetch(API_URL, config);
+
+    if (!res.ok)
+      throw new Error('Something went wrong while trying to update user.');
+
+    return res.json();
   };
   const remove = async (id: string) => {
     const API_URL = `/api/user/${id}`;
@@ -37,7 +55,12 @@ export const useUserInfo = () => {
       method: 'DELETE',
     };
 
-    return fetch(API_URL, config);
+    const res = await fetch(API_URL, config);
+
+    if (!res.ok)
+      throw new Error('Something went wrong while trying to delete user.');
+
+    return res.json();
   };
   return { create, list, find, update, remove };
 };
